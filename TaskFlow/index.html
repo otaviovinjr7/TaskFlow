@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="description"
+    content="TaskFlow: gerencie tarefas, prioridades,
+    prazos e produtividade em um só lugar."
+  >
+
+  <title>TaskFlow | Gerenciador de Tarefas</title>
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <div class="app-layout">
+
+    <aside class="sidebar">
+      <a href="#" class="brand">
+        <span class="brand-icon">✓</span>
+        <span>TaskFlow</span>
+      </a>
+
+      <p class="menu-label">MENU PRINCIPAL</p>
+
+      <nav class="navigation">
+        <button class="nav-item active"
+                data-filter="all">
+          <span>▦</span> Todas as tarefas
+        </button>
+
+        <button class="nav-item"
+                data-filter="today">
+          <span>◷</span> Para hoje
+        </button>
+
+        <button class="nav-item"
+                data-filter="pending">
+          <span>○</span> Pendentes
+        </button>
+
+        <button class="nav-item"
+                data-filter="completed">
+          <span>✓</span> Concluídas
+        </button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <p>ORGANIZE SEU DIA</p>
+        <span>Pequenos passos, grandes resultados.</span>
+      </div>
+    </aside>
+
+    <main class="main-content">
+
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">SEU ESPAÇO DE PRODUTIVIDADE</p>
+          <h1>Meu painel</h1>
+          <p class="subtitle">
+            Organize suas tarefas e acompanhe seu progresso.
+          </p>
+        </div>
+
+        <button class="primary-button" id="open-task-form">
+          + Nova tarefa
+        </button>
+      </header>
+
+      <section class="stats-grid" aria-label="Indicadores">
+        <article class="stat-card">
+          <p>Total de tarefas</p>
+          <strong id="total-tasks">0</strong>
+          <span>Atividades cadastradas</span>
+        </article>
+
+        <article class="stat-card">
+          <p>Pendentes</p>
+          <strong id="pending-tasks">0</strong>
+          <span>Aguardando conclusão</span>
+        </article>
+
+        <article class="stat-card">
+          <p>Concluídas</p>
+          <strong id="completed-tasks">0</strong>
+          <span>Atividades finalizadas</span>
+        </article>
+
+        <article class="stat-card">
+          <p>Produtividade</p>
+          <strong id="productivity">0%</strong>
+          <span>Taxa de conclusão</span>
+        </article>
+      </section>
+
+      <section class="progress-card">
+        <div class="section-heading">
+          <div>
+            <h2>Seu progresso</h2>
+            <p>Acompanhe o quanto você já realizou.</p>
+          </div>
+          <strong id="progress-label">0%</strong>
+        </div>
+
+        <div class="progress-track"
+             role="progressbar"
+             aria-label="Progresso das tarefas"
+             aria-valuemin="0"
+             aria-valuemax="100"
+             aria-valuenow="0"
+             id="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </section>
+
+      <section class="tasks-section">
+        <div class="section-heading">
+          <div>
+            <h2>Minhas tarefas</h2>
+            <p>Gerencie suas atividades com facilidade.</p>
+          </div>
+        </div>
+
+        <div class="filters">
+          <input
+            type="search"
+            id="search-task"
+            placeholder="Buscar tarefa..."
+            aria-label="Buscar tarefa pelo título"
+          >
+
+          <select id="priority-filter"
+                  aria-label="Filtrar por prioridade">
+            <option value="all">Todas as prioridades</option>
+            <option value="high">Alta prioridade</option>
+            <option value="medium">Média prioridade</option>
+            <option value="low">Baixa prioridade</option>
+          </select>
+
+          <select id="sort-tasks"
+                  aria-label="Ordenar tarefas">
+            <option value="deadline">Ordenar por prazo</option>
+            <option value="priority">Ordenar por prioridade</option>
+            <option value="created">Mais recentes</option>
+          </select>
+        </div>
+
+        <div id="task-list" class="task-list">
+          <div class="empty-state">
+            <h3>Nenhuma tarefa por enquanto</h3>
+            <p>Adicione sua primeira tarefa para começar.</p>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        TaskFlow © 2026 · Feito para organizar melhor seu dia.
+      </footer>
+    </main>
+  </div>
+
+  <dialog id="task-dialog" class="task-dialog">
+    <form id="task-form">
+      <div class="dialog-heading">
+        <div>
+          <h2 id="dialog-title">Nova tarefa</h2>
+          <p>Preencha os dados da sua atividade.</p>
+        </div>
+
+        <button type="button"
+                id="close-task-form"
+                class="close-button"
+                aria-label="Fechar formulário">
+          ×
+        </button>
+      </div>
+
+      <label for="task-title">Título da tarefa</label>
+      <input
+        id="task-title"
+        name="title"
+        type="text"
+        maxlength="100"
+        placeholder="Ex.: Estudar JavaScript"
+        required
+      >
+
+      <label for="task-description">Descrição</label>
+      <textarea
+        id="task-description"
+        name="description"
+        maxlength="500"
+        placeholder="Descreva o que precisa ser feito."
+        rows="3"
+      ></textarea>
+
+      <div class="form-row">
+        <div>
+          <label for="task-priority">Prioridade</label>
+          <select id="task-priority" name="priority">
+            <option value="high">Alta</option>
+            <option value="medium" selected>Média</option>
+            <option value="low">Baixa</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="task-deadline">Prazo</label>
+          <input
+            id="task-deadline"
+            name="deadline"
+            type="date"
+            required
+          >
+        </div>
+      </div>
+
+      <div class="dialog-actions">
+        <button type="button"
+                id="cancel-task"
+                class="secondary-button">
+          Cancelar
+        </button>
+
+        <button type="submit"
+                class="primary-button"
+                id="save-task">
+          Salvar tarefa
+        </button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>
